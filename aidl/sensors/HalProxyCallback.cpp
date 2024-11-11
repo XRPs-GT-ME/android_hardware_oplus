@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include "AlsCorrection.h"
+
 #include "HalProxyCallback.h"
 
 #include <cinttypes>
@@ -91,6 +93,12 @@ std::vector<V2_1::Event> HalProxyCallbackBase::processEvents(const std::vector<V
             if (nodeFile.is_open()) {
                 nodeFile << !event.u.scalar;
                 nodeFile.close();
+            }
+        }
+
+        for (V2_1::Event event : events) {
+            if (sensor.typeAsString == "qti.sensor.wise_light") {
+                V2_1::implementation::AlsCorrection::correct(event.u.scalar);
             }
         }
 

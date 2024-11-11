@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include "AlsCorrection.h"
+
 #include "HalProxy.h"
 
 #include <android/hardware/sensors/2.0/types.h>
@@ -103,8 +105,7 @@ bool patchOplusLightSensor(V2_1::SensorInfo& sensor) {
     }
 
     sensor.type = V2_1::SensorType::LIGHT;
-    sensor.typeAsString = SENSOR_STRING_TYPE_LIGHT;
-
+    AlsCorrection::init();
     return true;
 }
 
