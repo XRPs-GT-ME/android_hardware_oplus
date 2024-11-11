@@ -97,6 +97,17 @@ bool patchOplusGlanceSensor(V2_1::SensorInfo& sensor) {
     return true;
 }
 
+bool patchOplusLightSensor(V2_1::SensorInfo& sensor) {
+    if (sensor.typeAsString != "qti.sensor.wise_light") {
+        return true;
+    }
+
+    sensor.type = V2_1::SensorType::LIGHT;
+    sensor.typeAsString = SENSOR_STRING_TYPE_LIGHT;
+
+    return true;
+}
+
 bool patchOplusPickupSensor(V2_1::SensorInfo& sensor) {
     if (sensor.typeAsString != "android.sensor.tilt_detector") {
         return true;
@@ -531,7 +542,8 @@ void HalProxy::initializeSensorList() {
                     ALOGV("Loaded sensor: %s", sensor.name.c_str());
                     sensor.sensorHandle = setSubHalIndex(sensor.sensorHandle, subHalIndex);
                     setDirectChannelFlags(&sensor, mSubHalList[subHalIndex]);
-                    bool keep = patchOplusPickupSensor(sensor) && patchOplusGlanceSensor(sensor);
+                    bool keep = patchOplusPickupSensor(sensor) && patchOplusGlanceSensor(sensor)
+                                    && patchOplusLightSensor(sensor);
                     if (!keep) {
                         continue;
                     }
